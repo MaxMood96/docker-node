@@ -1,32 +1,36 @@
 {
-  "17": {
-    "start": "2021-10-19",
+  "23": {
+    "start": "2024-10-15",
     "lts": "",
-    "maintenance": "2022-04-01",
-    "end": "2022-06-01",
+    "maintenance": "2025-04-01",
+    "end": "2025-06-01",
     "codename": "",
-    "alpine-default": "alpine3.14",
-    "debian-default": "bullseye",
+    "alpine-default": "alpine3.21",
+    "debian-default": "bookworm",
     "variants": {
-      "alpine3.12": [
+      "alpine3.20": [
         "amd64",
         "arm32v6",
+        "arm32v7",
+        "arm64v8",
+        "s390x"
+      ],
+      "alpine3.21": [
+        "amd64",
+        "arm32v6",
+        "arm32v7",
+        "arm64v8",
+        "s390x"
+      ],
+      "bookworm": [
+        "amd64",
         "arm32v7",
         "arm64v8",
         "ppc64le",
         "s390x"
       ],
-      "alpine3.13": [
+      "bookworm-slim": [
         "amd64",
-        "arm32v6",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "alpine3.14": [
-        "amd64",
-        "arm32v6",
         "arm32v7",
         "arm64v8",
         "ppc64le",
@@ -35,79 +39,47 @@
       "bullseye": [
         "amd64",
         "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "bullseye-slim": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "buster": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "buster-slim": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "stretch": [
-        "amd64",
-        "arm32v7",
         "arm64v8"
       ],
-      "stretch-slim": [
+      "bullseye-slim": [
         "amd64",
         "arm32v7",
         "arm64v8"
       ]
     }
   },
-  "16": {
-    "start": "2021-04-20",
-    "lts": "2021-10-26",
-    "maintenance": "2022-10-18",
-    "end": "2024-04-30",
-    "codename": "",
-    "alpine-default": "alpine3.13",
-    "debian-default": "buster",
+  "22": {
+    "start": "2024-04-23",
+    "lts": "2024-10-29",
+    "maintenance": "2025-10-21",
+    "end": "2027-04-30",
+    "codename": "jod",
+    "alpine-default": "alpine3.21",
+    "debian-default": "bookworm",
     "variants": {
-      "alpine3.11": [
+      "alpine3.20": [
         "amd64",
         "arm32v6",
+        "arm32v7",
+        "arm64v8",
+        "s390x"
+      ],
+      "alpine3.21": [
+        "amd64",
+        "arm32v6",
+        "arm32v7",
+        "arm64v8",
+        "s390x"
+      ],
+      "bookworm": [
+        "amd64",
         "arm32v7",
         "arm64v8",
         "ppc64le",
         "s390x"
       ],
-      "alpine3.12": [
+      "bookworm-slim": [
         "amd64",
-        "arm32v6",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "alpine3.13": [
-        "amd64",
-        "arm32v6",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "alpine3.14": [
-        "amd64",
-        "arm32v6",
         "arm32v7",
         "arm64v8",
         "ppc64le",
@@ -116,53 +88,25 @@
       "bullseye": [
         "amd64",
         "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "bullseye-slim": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "buster": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "buster-slim": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "stretch": [
-        "amd64",
-        "arm32v7",
         "arm64v8"
       ],
-      "stretch-slim": [
+      "bullseye-slim": [
         "amd64",
         "arm32v7",
         "arm64v8"
       ]
     }
   },
-  "14": {
-    "start": "2020-04-21",
-    "lts": "2020-10-27",
-    "maintenance": "2021-10-25",
-    "end": "2023-04-30",
-    "codename": "fermium",
-    "alpine-default": "alpine3.11",
-    "debian-default": "stretch",
+  "20": {
+    "start": "2023-04-18",
+    "lts": "2023-10-24",
+    "maintenance": "2024-10-22",
+    "end": "2026-04-30",
+    "codename": "iron",
+    "alpine-default": "alpine3.21",
+    "debian-default": "bookworm",
     "variants": {
-      "alpine3.11": [
+      "alpine3.20": [
         "amd64",
         "arm32v6",
         "arm32v7",
@@ -170,7 +114,7 @@
         "ppc64le",
         "s390x"
       ],
-      "alpine3.12": [
+      "alpine3.21": [
         "amd64",
         "arm32v6",
         "arm32v7",
@@ -178,17 +122,15 @@
         "ppc64le",
         "s390x"
       ],
-      "alpine3.13": [
+      "bookworm": [
         "amd64",
-        "arm32v6",
         "arm32v7",
         "arm64v8",
         "ppc64le",
         "s390x"
       ],
-      "alpine3.14": [
+      "bookworm-slim": [
         "amd64",
-        "arm32v6",
         "arm32v7",
         "arm64v8",
         "ppc64le",
@@ -197,53 +139,25 @@
       "bullseye": [
         "amd64",
         "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "bullseye-slim": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "buster": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "buster-slim": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "stretch": [
-        "amd64",
-        "arm32v7",
         "arm64v8"
       ],
-      "stretch-slim": [
+      "bullseye-slim": [
         "amd64",
         "arm32v7",
         "arm64v8"
       ]
     }
   },
-  "12": {
-    "start": "2019-04-23",
-    "lts": "2019-10-21",
-    "maintenance": "2020-11-30",
-    "end": "2022-04-30",
-    "codename": "erbium",
-    "alpine-default": "alpine3.11",
-    "debian-default": "stretch",
+  "18": {
+    "start": "2022-04-19",
+    "lts": "2022-10-25",
+    "maintenance": "2023-10-18",
+    "end": "2025-04-30",
+    "codename": "hydrogen",
+    "alpine-default": "alpine3.21",
+    "debian-default": "bookworm",
     "variants": {
-      "alpine3.11": [
+      "alpine3.20": [
         "amd64",
         "arm32v6",
         "arm32v7",
@@ -251,7 +165,7 @@
         "ppc64le",
         "s390x"
       ],
-      "alpine3.12": [
+      "alpine3.21": [
         "amd64",
         "arm32v6",
         "arm32v7",
@@ -259,17 +173,15 @@
         "ppc64le",
         "s390x"
       ],
-      "alpine3.13": [
+      "bookworm": [
         "amd64",
-        "arm32v6",
         "arm32v7",
         "arm64v8",
         "ppc64le",
         "s390x"
       ],
-      "alpine3.14": [
+      "bookworm-slim": [
         "amd64",
-        "arm32v6",
         "arm32v7",
         "arm64v8",
         "ppc64le",
@@ -278,37 +190,9 @@
       "bullseye": [
         "amd64",
         "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "bullseye-slim": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "buster": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "buster-slim": [
-        "amd64",
-        "arm32v7",
-        "arm64v8",
-        "ppc64le",
-        "s390x"
-      ],
-      "stretch": [
-        "amd64",
-        "arm32v7",
         "arm64v8"
       ],
-      "stretch-slim": [
+      "bullseye-slim": [
         "amd64",
         "arm32v7",
         "arm64v8"
