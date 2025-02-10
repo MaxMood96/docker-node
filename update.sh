@@ -15,8 +15,8 @@ function usage() {
     - update.sh -s                   # Update all images, skip updating Alpine and Yarn
     - update.sh 8,10                 # Update all variants of version 8 and 10
     - update.sh -s 8                 # Update version 8 and variants, skip updating Alpine and Yarn
-    - update.sh 8 buster-slim,buster # Update only buster's slim and buster variants for version 8
-    - update.sh -s 8 stretch         # Update only stretch variant for version 8, skip updating Alpine and Yarn
+    - update.sh 8 alpine             # Update only alpine's variants for version 8
+    - update.sh -s 8 bullseye        # Update only bullseye variant for version 8, skip updating Alpine and Yarn
     - update.sh . alpine             # Update the alpine variant for all versions
 
   OPTIONS:
@@ -122,11 +122,11 @@ function update_node_version() {
     shift
   fi
 
-  fullVersion="$(curl -sSL --compressed "${baseuri}" | grep '<a href="v'"${version}." | sed -E 's!.*<a href="v([^"/]+)/?".*!\1!' | cut -d'.' -f2,3 | sort -n | tail -1)"
+  fullVersion="$(curl -sSL --compressed "${baseuri}" | grep '<a href="v'"${version}." | sed -E 's!.*<a href="v([^"/]+)/?".*!\1!' | cut -d'.' -f2,3 | sort -V | tail -1)"
   (
     cp "${template}" "${dockerfile}-tmp"
     local fromprefix=""
-    if [ "${arch}" != "amd64" ]; then
+    if [ "${arch}" != "amd64" ] && [ "${arch}" != "arm64" ]; then
       fromprefix="${arch}\\/"
     fi
 
@@ -135,11 +135,8 @@ function update_node_version() {
     sed -Ei -e 's/^FROM (.*)/FROM '"$fromprefix"'\1/' "${dockerfile}-tmp"
     sed -Ei -e 's/^(ENV NODE_VERSION ).*/\1'"${nodeVersion}"'/' "${dockerfile}-tmp"
 
-    if [ "${SKIP}" = true ]; then
-      # Get the currently used Yarn version
-      yarnVersion="$(grep "ENV YARN_VERSION" "${dockerfile}" | cut -d' ' -f3)"
-    fi
-    sed -Ei -e 's/^(ENV YARN_VERSION ).*/\1'"${yarnVersion}"'/' "${dockerfile}-tmp"
+    currentYarnVersion="$(grep "ENV YARN_VERSION" "${dockerfile}" | cut -d' ' -f3)"
+    sed -Ei -e 's/^(ENV YARN_VERSION ).*/\1'"${currentYarnVersion}"'/' "${dockerfile}-tmp"
 
     # shellcheck disable=SC1004
     new_line=' \\\
@@ -160,23 +157,27 @@ function update_node_version() {
         curl -sSL --compressed "https://unofficial-builds.nodejs.org/download/release/v${nodeVersion}/SHASUMS256.txt" | grep "node-v${nodeVersion}-linux-x64-musl.tar.xz" | cut -d' ' -f1
       )
       if [ -z "$checksum" ]; then
+        rm -f "${dockerfile}-tmp"
         fatal "Failed to fetch checksum for version ${nodeVersion}"
       fi
       sed -Ei -e "s/(alpine:)0.0/\\1${alpine_version}/" "${dockerfile}-tmp"
       sed -Ei -e "s/CHECKSUM=CHECKSUM_x64/CHECKSUM=\"${checksum}\"/" "${dockerfile}-tmp"
 
-      # Use python2 for nodejs < 14 on alpine
-      if [ "$version" -lt 14 ]; then
-        pythonVersion="python2"
-      else
-        pythonVersion="python3"
-      fi
-
-      sed -Ei -e 's/\$\{PYTHON_VERSION\}/'"${pythonVersion}"'/' "${dockerfile}-tmp"
     elif is_debian "${variant}"; then
       sed -Ei -e "s/(buildpack-deps:)name/\\1${variant}/" "${dockerfile}-tmp"
     elif is_debian_slim "${variant}"; then
       sed -Ei -e "s/(debian:)name-slim/\\1${variant}/" "${dockerfile}-tmp"
+    fi
+
+    if diff -q "${dockerfile}-tmp" "${dockerfile}" > /dev/null; then
+      echo "${dockerfile} is already up to date!"
+    else
+      if [ "${SKIP}" = true ]; then
+        # Get the currently used Yarn version
+        yarnVersion="$(grep "ENV YARN_VERSION" "${dockerfile}" | cut -d' ' -f3)"
+      fi
+      sed -Ei -e 's/^(ENV YARN_VERSION ).*/\1'"${yarnVersion}"'/' "${dockerfile}-tmp"
+      echo "${dockerfile} updated!"
     fi
 
     # Required for POSIX sed
@@ -184,15 +185,11 @@ function update_node_version() {
       rm "${dockerfile}-tmp-e"
     fi
 
-    if diff -q "${dockerfile}-tmp" "${dockerfile}" > /dev/null; then
-      echo "${dockerfile} is already up to date!"
-    else
-      echo "${dockerfile} updated!"
-    fi
-
     mv -f "${dockerfile}-tmp" "${dockerfile}"
   )
 }
+
+pids=()
 
 for version in "${versions[@]}"; do
   parentpath=$(dirname "${version}")
@@ -205,8 +202,6 @@ for version in "${versions[@]}"; do
   # Get supported variants according the target architecture
   # See details in function.sh
   IFS=' ' read -ra variants <<< "$(get_variants "${parentpath}")"
-
-  pids=()
 
   if [ -f "${version}/Dockerfile" ]; then
     if [ "${update_version}" -eq 0 ]; then

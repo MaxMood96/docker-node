@@ -6,11 +6,14 @@ on:
       - ".github/workflows/missing-checksum.yml"
       - "**/alpine*/Dockerfile"
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Count number of Alpine Dockersfiles without CHECKSUM
         run: |
