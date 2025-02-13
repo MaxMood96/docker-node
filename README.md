@@ -1,6 +1,6 @@
 # Node.js
 
-[![dockeri.co](http://dockeri.co/image/_/node)](https://registry.hub.docker.com/_/node/)
+[![dockeri.co](https://dockerico.blankenship.io/image/node)](https://hub.docker.com/_/node)
 
 [![GitHub issues](https://img.shields.io/github/issues/nodejs/docker-node.svg "GitHub issues")](https://github.com/nodejs/docker-node)
 [![GitHub stars](https://img.shields.io/github/stars/nodejs/docker-node.svg "GitHub stars")](https://github.com/nodejs/docker-node)
@@ -23,8 +23,8 @@ The official Node.js docker image, made with love by the node community.
 - [Image Variants](#image-variants)
   - [`node:<version>`](#nodeversion)
   - [`node:alpine`](#nodealpine)
-  - [`node:buster`](#nodebuster)
-  - [`node:stretch`](#nodestretch)
+  - [`node:bullseye`](#nodebullseye)
+  - [`node:bookworm`](#nodebookworm)
   - [`node:slim`](#nodeslim)
 - [License](#license)
 - [Supported Docker versions](#supported-docker-versions)
@@ -52,7 +52,7 @@ See: http://nodejs.org
 
 ```dockerfile
 # specify the node base image with your desired version node:<version>
-FROM node:10
+FROM node:16
 # replace this with your application's default port
 EXPOSE 8888
 ```
@@ -79,6 +79,8 @@ services:
       - ./:/home/node/app
     expose:
       - "8081"
+    ports: # use if it is necessary to expose the container to the host machine
+      - "8001:8001"
     command: "npm start"
 ```
 
@@ -88,7 +90,7 @@ You can then run using Docker Compose:
 $ docker-compose up -d
 ```
 
-Docker Compose example copies your current directory (including node_modules) to the container.
+Docker Compose example mounts your current directory (including node_modules) to the container.
 It assumes that your application has a file named [`package.json`](https://docs.npmjs.com/files/package.json)
 defining [start script](https://docs.npmjs.com/misc/scripts#default-values).
 
@@ -108,15 +110,15 @@ $ docker run -it --rm --name my-running-script -v "$PWD":/usr/src/app -w /usr/sr
 
 ### Verbosity
 
-Prior to 8.7.0 and 6.11.4 the docker images overrode the default npm log
-level from `warn` to `info`. However due to improvements to npm and new Docker
+Prior to 8.7.0 and 6.11.4, the docker images overrode the default npm log
+level from `warn` to `info`. However, due to improvements to npm and new Docker
 patterns (e.g. multi-stage builds) the working group reached a [consensus](https://github.com/nodejs/docker-node/issues/528)
 to revert the log level to npm defaults. If you need more verbose output, please
 use one of the following methods to change the verbosity level.
 
 #### Dockerfile
 
-If you create your own `Dockerfile` which inherits from the `node` image you can
+If you create your own `Dockerfile` which inherits from the `node` image, you can
 simply use `ENV` to override `NPM_CONFIG_LOGLEVEL`.
 
 ```dockerfile
@@ -127,7 +129,7 @@ ENV NPM_CONFIG_LOGLEVEL info
 
 #### Docker Run
 
-If you run the node image using `docker run` you can use the `-e` flag to
+If you run the node image using `docker run`, you can use the `-e` flag to
 override `NPM_CONFIG_LOGLEVEL`.
 
 ```console
@@ -136,7 +138,7 @@ $ docker run -e NPM_CONFIG_LOGLEVEL=info node ...
 
 #### NPM run
 
-If you are running npm commands you can use `--loglevel` to control the
+If you are running npm commands, you can use `--loglevel` to control the
 verbosity of the output.
 
 ```console
@@ -181,10 +183,18 @@ requirements. However, most software doesn't have an issue with this, so this
 variant is usually a very safe choice. See
 [this Hacker News comment thread](https://news.ycombinator.com/item?id=10782897)
 for more discussion of the issues that might arise and some pro/con comparisons
-of using Alpine-based images. One common issue that may arise is a missing shared
-library required for use of `process.dlopen`. To add the missing shared libraries
-to your image, adding the [`libc6-compat`](https://pkgs.alpinelinux.org/package/edge/main/x86/libc6-compat)
+of using Alpine-based images.
+
+One common issue that may arise is a missing shared library required for use of
+`process.dlopen`. To add the missing shared libraries to your image:
+
+- For Alpine v3.18 and earlier, adding the
+[`libc6-compat`](https://pkgs.alpinelinux.org/package/v3.18/main/x86/libc6-compat)
 package in your Dockerfile is recommended: `apk add --no-cache libc6-compat`
+
+- Starting from Alpine v3.19, you can use the
+[`gcompat`](https://pkgs.alpinelinux.org/package/v3.19/main/x86/gcompat) package
+to add the missing shared libraries: `apk add --no-cache gcompat`
 
 To minimize image size, it's uncommon for additional related tools
 (such as `git` or `bash`) to be included in Alpine-based images. Using this
@@ -192,13 +202,17 @@ image as a base, add the things you need in your own Dockerfile
 (see the [`alpine` image description](https://hub.docker.com/_/alpine/) for
 examples of how to install packages if you are unfamiliar).
 
-### `node:buster`
-This image is based on version 10 of
+To make the image size even smaller, you can [bundle without npm/yarn](./docs/BestPractices.md#smaller-images-without-npmyarn).
+
+### `node:bullseye`
+
+This image is based on version 11 of
 [Debian](http://debian.org), available in
 [the `debian` official image](https://hub.docker.com/_/debian).
 
-### `node:stretch`
-This image is based on version 9 of
+### `node:bookworm`
+
+This image is based on version 12 of
 [Debian](http://debian.org), available in
 [the `debian` official image](https://hub.docker.com/_/debian).
 
